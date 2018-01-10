@@ -1,4 +1,4 @@
-FROM binarycat/cx_oracle:latest
+FROM binarycat/cx_oracle:5
 
 RUN pip install pony
 RUN pip install flask
