@@ -4,8 +4,9 @@ from cx_Oracle import makedsn
 from flask import Flask
 from pony.orm import *
 
+logging.basicConfig(level=os.environ.get('LOG_LEVEL', 'DEBUG'))
 log = logging.getLogger(__name__)
-log.addHandler(logging.StreamHandler())
+
 
 db = Database()
 app = Flask(__name__)
@@ -18,13 +19,19 @@ _host = os.environ.get('DB_HOST', 'localhost')
 _port = int(os.environ.get('DB_PORT', 1521))
 _sid = os.environ.get('DB_SID')  # db name
 
+log.debug("HOST: %s", _host)
+log.debug("PORT: %s", _port)
+log.debug("SID: %s", _sid)
+log.debug("USER: %s", _user)
+
+
 def _connection_checker():
     global db
     global _is_connected
     if _is_connected:
         return True, 'OK'
 
-    conn_string = '%s/%s@%s' % (_user, _password, _makedsn(host, port, sid))
+    conn_string = '%s/%s@%s' % (_user, _password, makedsn(_host, _port, _sid))
     try:
         db.bind("oracle", conn_string)
         log.info('Connected to [%s:%s]' % (_host, _port))
