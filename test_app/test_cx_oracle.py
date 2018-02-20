@@ -12,6 +12,11 @@ app = Flask(__name__)
 
 _is_connected = False
 
+_user = os.environ.get('DB_USER')
+_password = os.environ.get('DB_PASSWORD')
+_host = os.environ.get('DB_HOST', 'localhost')
+_port = int(os.environ.get('DB_PORT', 1521))
+_sid = os.environ.get('DB_SID')  # db name
 
 def _connection_checker():
     global db
@@ -19,17 +24,10 @@ def _connection_checker():
     if _is_connected:
         return True, 'OK'
 
-    user = os.environ.get('DB_USER')
-    password = os.environ.get('DB_PASSWORD')
-
-    host = os.environ.get('DB_HOST', 'localhost')
-    port = int(os.environ.get('DB_PORT', 1521))
-    sid = os.environ.get('DB_SID')  # db name
-
-    conn_string = '%s/%s@%s' % (user, password, makedsn(host, port, sid))
+    conn_string = '%s/%s@%s' % (_user, _password, _makedsn(host, port, sid))
     try:
         db.bind("oracle", conn_string)
-        log.info('Connected to [%s:%s]' % (host, port))
+        log.info('Connected to [%s:%s]' % (_host, _port))
     except Exception as e:
         log.exception(e)
         return False, e.message

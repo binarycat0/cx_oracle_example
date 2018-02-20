@@ -1,11 +1,9 @@
 FROM binarycat/cx_oracle:5
 
-RUN pip install pony
-RUN pip install flask
+RUN pip install flask pony==0.7
 
-
+COPY ./test_app /app
 WORKDIR /app
-ADD . /app
 
 ENV FLASK_APP /app/test_cx_oracle.py
 
