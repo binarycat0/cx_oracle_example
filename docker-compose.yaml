@@ -1,0 +1,16 @@
+version: "3"
+
+services: 
+  test-web:
+    build: .
+    hostname: "test-web"
+    environment: 
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_SID=${DB_SID}
+    volumes: 
+      - ./test_app/:/app/
+    ports:
+      - 127.0.0.1:8080:80
