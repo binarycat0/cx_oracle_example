@@ -32,6 +32,9 @@ def _connection_checker():
         return True, 'OK'
 
     conn_string = '%s/%s@%s' % (_user, _password, makedsn(_host, _port, _sid))
+    # Instead of going for single connection which is pretty much resource consuming - you can always use connection pool in like below 
+    # cx_Oracle.SessionPool(username,password,DB_name,min=1,max=8, timeout=300)
+    #make sure you set min , max and timeout as per requirnment  
     try:
         db.bind("oracle", conn_string)
         log.info('Connected to [%s:%s]' % (_host, _port))
